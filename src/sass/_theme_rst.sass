@@ -1,0 +1,492 @@
+// -------------------------------------------------------------------------------------------------------------------
+// CONTRIBUTORS, PLEASE READ THIS!
+// -------------------------------------------------------------------------------------------------------------------
+// Couple things...
+//    1. Lots of this @extends from wyrm_core/_type.sass (http://www.github.com/snide/wyrm/.
+//        * Try not to replace any @extends code. It's pretty generic stuff meant to work together.
+//        * That said, know that I'm very unlikely to accept PRs from wyrm just to change style here.
+//    2. I plan to remove the !importants in here. Part of it is due to lazyness, part to sphinx's fondness for nesting.
+//    3. Try to use variables from wyrm_core/wy_variables.sass. Notable are...
+//        * $line-height-base // All margins, padding and line-height should use this in .25 increments.
+//        * $text-color, $text-light, $text-dark...etc
+//    4. If you have changes for mobile/tablet, put them at the bottom of the sass file.
+// --------------------------------------------------------------------------------------------------------------------
+
+.rst-content
+  // Sphinx by default applies HxW style attributes to images. This fixes that oversite.
+  img
+    max-width: 100%
+    height: auto
+
+  div.figure
+    margin-bottom: $line-height-base
+    p.caption
+      font-style: italic
+    p:last-child.caption
+      margin-bottom: 0px
+
+  div.figure.align-center
+    text-align: center
+
+  // Usually it's a good idea to give images some space.
+  .section > img,   .section > a > img
+    margin-bottom: $line-height-base
+
+  // normalize browser styling
+  abbr[title]
+    text-decoration: none
+
+  // Style external links
+  &.style-external-links a.reference.external:after
+    font-family: FontAwesome
+    content: "\f08e"
+    color: $text-light
+    vertical-align: super
+    font-size: 60%
+    margin: 0 0.2em
+
+  // For the most part, its safe to assume that sphinx wants you to use a blockquote as an indent. It gets
+  // used in many different ways, so don't assume you can apply some fancy style, just leave it be.
+  blockquote
+    @extend .blockquote
+    margin-left: $line-height-base
+    line-height: $line-height-base
+    margin-bottom: $line-height-base
+    font-size: $font-size-base
+
+  pre.literal-block
+    white-space: pre
+    margin: 0
+    padding: $line-height-base / 2 $line-height-base / 2
+    font-family: $font-family-code
+    display: block
+    overflow: auto
+  pre.literal-block, div[class^='highlight']
+    border: 1px solid $gray-300
+    overflow-x: auto
+    // 1px hack otherwise border won't show. lame
+    margin: 1px 0 $line-height-base 0
+    div[class^='highlight']
+      padding: 0px
+      border: none
+      margin: 0
+  // Needs 100% width for line highlighting to work properly
+  div[class^='highlight'] td.code
+    width: 100%
+  .linenodiv pre
+    border-right: solid 1px $gray-300
+    margin: 0
+    padding: $line-height-base / 2 $line-height-base / 2
+    font-family: $font-family-code
+    user-select: none
+    pointer-events: none
+  div[class^='highlight'] pre
+    white-space: pre
+    margin: 0
+    padding: $line-height-base / 2 $line-height-base / 2
+    display: block
+    overflow: auto
+    & .hll
+      // Line emphasis spans full width
+      display: block
+      margin: 0 -1 * $line-height-base / 2
+      padding: 0 $line-height-base / 2
+  pre.literal-block, div[class^='highlight'] pre, .linenodiv pre
+    font-family: $font-family-code
+    font-size: 12px
+    line-height: 1.4
+  
+  .literal-block-wrapper
+    padding: 0px 
+
+  // Do not allow selection of code block prompts
+  div.highlight .gp
+    user-select: none
+    pointer-events: none
+
+  .code-block-caption
+    font-style: italic
+    font-size: 85%
+    line-height: 1
+    padding: 1em 0
+    text-align: center
+
+  @media print
+    .codeblock, div[class^='highlight'], div[class^='highlight'] pre
+      white-space: pre-wrap
+
+  // These are the various note pullouts that sphinx applies
+  .note, .attention, .caution, .danger, .error, .hint, .important, .tip, .warning, .seealso, .admonition-todo, .admonition
+    @extend .alert
+    color: $text-color
+    // These block elements are unsuitable for having floating objects next
+    // to them
+    clear: both
+    .last, > *:last-child
+      margin-bottom: 0
+  .admonition-title
+    // @extend .alert-heading
+    @extend .fa
+    @extend .fa-exclamation-circle
+    &:before
+      margin-right: 4px
+  .note, .seealso
+    @extend .alert-info
+  .hint, .tip, .important
+    @extend .alert-success
+  .error, .danger
+    @extend .alert-danger
+  .warning, .caution, .attention, .admonition-todo
+    @extend .alert-warning
+  // Some people put tables in notes. Let's give them very basic support.
+  .admonition table
+    border-color: rgba(0,0,0,.1)
+    td, th
+      background: transparent !important
+      border-color: rgba(0,0,0,.1) !important
+  .section ul, .toctree-wrapper ul
+     list-style: disc
+     line-height: $line-height-base
+     margin-bottom: $line-height-base
+     li
+       list-style: disc
+       margin-left: $line-height-base
+       p:last-child
+         margin-bottom: 0
+       ul
+         margin-bottom: 0
+       li
+         list-style: circle
+         li
+           list-style: square
+       ol li
+         list-style: decimal
+  .section ol.loweralpha, .section ol.loweralpha > li
+    list-style: lower-alpha
+  .section ol.upperalpha, .section ol.upperalpha > li
+    list-style: upper-alpha
+  .section ol, ol.arabic
+     list-style: decimal
+     line-height: $line-height-base
+     margin-bottom: $line-height-base
+     li
+       list-style: decimal
+       margin-left: $line-height-base
+       p:last-child
+         margin-bottom: 0
+       ul
+         margin-bottom: 0
+         li
+           list-style: disc
+  // Complex bullet lists, they have more item margins than simple lists
+  .section ol li, .section ul li
+    > *
+      margin-top: $line-height-base / 2
+      margin-bottom: $line-height-base / 2
+      &:first-child
+        margin-top: 0rem
+    > p
+      &, &:last-child
+        margin-bottom: $line-height-base / 2
+      &:only-child, &:only-child:last-child
+        margin-bottom: 0rem
+    > ul, > ol
+      margin-bottom: $line-height-base / 2
+  // Simple lists, no item margins
+  .section ol.simple li, .section ul.simple li
+    > *
+      margin-top: 0rem
+      margin-bottom: 0rem
+    ul, ol
+      margin-top: 0rem
+      margin-bottom: 0rem
+  .line-block
+    margin-left: 0px
+    margin-bottom: $line-height-base
+    line-height: $line-height-base
+  .line-block .line-block
+    margin-left: $line-height-base
+    margin-bottom: 0px
+
+  // Generics handling of headings and toc stuff.
+  .topic-title
+    font-weight: bold
+    margin-bottom: $line-height-base / 2
+  .toc-backref
+    color: $text-color
+    &:hover
+      text-decoration-line: none
+  .align-right
+    float: right
+    margin: 0px 0px $line-height-base $line-height-base
+  .align-left
+    float: left
+    margin: 0px $line-height-base $line-height-base 0px
+  .align-center
+    margin: auto
+    // Do not override display:table for tables
+    &:not(table)
+      display: block
+  .toctree-wrapper > p.caption
+    @extend h2
+
+  // This is the #href that shows up on hover. Sphinx's is terrible so I hack it away.
+  h1, h2, h3, h4, h5, h6, dl dt, p.caption, table > caption, .code-block-caption
+    .headerlink
+      visibility: hidden
+      font-size: 14px
+      @extend .fa
+      &:after
+        content: "\f0c1"
+        font-family: FontAwesome
+    &:hover .headerlink:after
+      visibility: visible
+
+  table > caption .headerlink:after
+    font-size: 12px
+
+  .centered
+    text-align: center
+
+  // Sphinx can highlight searched text with ?highlighted=searchterm
+  .highlighted
+    background: $highlight-color
+    box-shadow: 0 0 0 $line-height-base / 12 $highlight-color
+    display: inline
+    font-weight: bold
+
+  // These are the little citation links [1] that show up within paragraphs.
+  .footnote-reference, .citation-reference
+    vertical-align: baseline
+    position: relative
+    top: -0.4em
+    line-height: 0
+    font-size: 90%
+
+  // Horizontal lists have multiple columns; use full width
+  .hlist
+    width: 100%
+
+  // Formate citation and footnotes as a table.
+  // We will use the fairly well supported css `grid` attribute
+  dl dt span.classifier
+    &:before
+      content: " : "
+  dl.footnote,
+  dl.field-list
+    display: grid
+    grid-template-columns: max-content auto
+    > dt
+      padding-left: 1rem
+      &:after
+        content: ":"
+    > dt, > dd
+      margin-bottom: 0rem
+  dl.footnote
+    font-size: .9rem
+    > dt
+      margin: 0rem .5rem .5rem 0rem
+      line-height: 1.2rem
+      word-break: break-all
+      font-weight: normal
+      > span.brackets
+        margin-right: .5rem
+        &:before
+          content: "["
+        &:after
+          content: "]"
+      > span.fn-backref
+        font-style: italic
+    > dd
+      margin: 0rem 0rem .5rem 0rem
+      line-height: 1.2rem
+      p
+        font-size: .9rem
+  dl.option-list
+    kbd
+      font-size: .9rem
+
+  table.docutils.footnote, dl.footnote
+    color: $text-medium
+    code
+      color: $gray-500
+
+  // Remove the large vertical space between citations and footnotes
+  .table-responsive.citation, .table-responsive.footnote
+    margin-bottom: 0
+  // Re-add vertical space to element directly following citation and footnotes,
+  // if the following element is of a different type
+  .table-responsive.citation + :not(.citation),
+  .table-responsive.footnote + :not(.footnote)
+    margin-top: $line-height-base
+  // Re-add vertical space after citation and footnotes if it is the last child of a parent
+  .table-responsive.citation:last-child, .table-responsivefootnote:last-child
+    margin-bottom: $line-height-base
+  table.docutils
+    @extend .table
+    @extend .table-bordered
+    th
+      border-color: $gray-300
+      html.writer-html5 &
+        border: 1px solid $gray-300
+    html.writer-html5 &
+      th > p, td > p
+        line-height: 1rem
+        margin-bottom: 0rem
+        font-size: .9rem
+    &:not(.field-list)
+      @extend .table-striped
+    // Remove bottom margin for the last element (and it's last child)
+    td .last, td .last > *:last-child
+      margin-bottom: 0
+  // This table is what gets spit out for auto-generated API stuff. I style it smaller bits of padding.
+  table.field-list
+    @extend .table
+    border: none
+    td
+      border: none
+      p
+        font-size: inherit
+        line-height: inherit
+    td > strong
+      display: inline-block
+    .field-name
+      padding-right: 10px
+      text-align: left
+      white-space: nowrap
+    .field-body
+      text-align: left
+
+  // These are the "literals" that get spit out when you mark stuff as ``code`` as your write.
+  tt, code
+    @extend code
+    color: $black
+    font-family: $font-family-code
+    padding: 2px 5px
+    big, em
+      font-size: 100% !important
+      line-height: normal
+
+    &.literal
+      border: 1px solid $gray-300
+      color: $red
+      white-space: normal
+    &.xref, a &
+      font-weight: bold
+      color: $text-codexref-color
+  pre, kbd, samp
+    font-family: $font-family-code
+  // If the literal is inside an a tag, let's color it like a link
+  a tt, a code
+    color: $link-color
+  dl
+    margin-bottom: $line-height-base
+    dt
+      font-weight: bold
+      margin-bottom: $line-height-base / 2
+    // Most of the content within these dls are one liners, so I halve the normal margins.
+    p, table, ul, ol
+      margin-bottom: $line-height-base / 2
+    // rST seems to want dds to be treated as the browser would, indented.
+    dd
+      margin: 0  0 $line-height-base / 2 $line-height-base
+      line-height: $line-height-base
+
+  dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple)
+    margin-bottom: $line-height-base
+    > dt
+      display: table
+      margin: $line-height-base / 4 0
+      font-size: 90%
+      line-height: normal
+      background: lighten($class-color, 45%)
+      color: $class-color
+      border-top: solid 3px lighten($class-color, 20%)
+      padding: $line-height-base / 4
+      position: relative
+      &:before
+        color: lighten($class-color, 20%)
+      .headerlink
+        color: $text-color
+        font-size: 100% !important
+    // parameters
+    dl:not(.field-list) > dt
+      margin-bottom: $line-height-base / 4
+      border: none
+      border-left: solid 3px hsl(0,0%,80%)
+      background: hsl(0,0%,94%)
+      color: $method-color
+      .headerlink
+        color: $headerlink-color
+        font-size: 100% !important
+      &:not(.sig-name)
+        color: darken($method-color, 35%)
+    > dt:first-child
+      margin-top: 0
+    // Since dts get the callout style, we treat this less as callouts.
+    tt, code
+      font-weight: bold
+      &.descname, &.descclassname
+        background-color: transparent
+        border: none
+        padding: 0
+        font-size: 100% !important
+      &.descname
+        font-weight: bold
+    // This is for more advanced parameter control
+    .optional
+      display: inline-block
+      padding: 0 4px
+      color: $black
+      font-weight: bold
+    .property
+      display: inline-block
+      padding-right: 8px
+  // Doc links to sourcecode
+  .viewcode-link, .viewcode-back
+    display: inline-block
+    color: $text-viewcode-color
+    font-size: 80%
+    padding-left: $line-height-base
+  .viewcode-back
+    display: block
+    float: right
+  p.rubric
+    margin-bottom: 12px
+    font-weight: bold
+  //Download link
+  code.download
+    background: inherit
+    padding: inherit
+    font-weight: normal
+    font-family: inherit
+    font-size: inherit
+    color: inherit
+    border: inherit
+    white-space: inherit
+    span:first-child
+      -webkit-font-smoothing: subpixel-antialiased
+      @extend .fa
+      @extend .fa-download
+      &:before
+        margin-right: 4px
+  .guilabel
+    border: 1px solid lighten($guilabel-color, 25%)
+    background: lighten($guilabel-color, 45%)
+    font-size: 80%
+    font-weight: 700
+    border-radius: $line-height-base / 6
+    padding: $line-height-base / 10 $line-height-base / 4
+    margin: auto $line-height-base / 12
+  kbd, .kbd
+    color: inherit
+    background: $gray-300
+  .versionmodified
+    font-style: italic
+
+
+// Mobile specific
+@include media-breakpoint-down(sm)
+  .rst-content
+    .sidebar
+      width: 100%

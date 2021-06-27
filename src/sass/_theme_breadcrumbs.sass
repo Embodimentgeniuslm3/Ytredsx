@@ -1,0 +1,14 @@
+.breadcrumb
+   padding-left: 0px
+   background-color: inherit
+
+.breadcrumb-aside
+   margin-left: auto
+
+@include media-breakpoint-down(sm)
+  .breadcrumb li.breadcrumb-aside
+    display: none
+
+@media print
+  .breadcrumb li.breadcrumb-aside
+    display: none
